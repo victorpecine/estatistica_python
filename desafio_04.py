@@ -24,4 +24,16 @@ for index in tabela_normal_padronizada.index:
 
 tabela_normal_padronizada.rename_axis('Z', axis = 'columns', inplace = True)
 
-print(tabela_normal_padronizada)
+
+# Variável padronizada Z
+media = 1.7
+
+desv_padrao = 0.1
+
+a = 1.8
+
+z = (a - media) / desv_padrao
+# 1.0000000000000009
+
+probabilidade = 0.8413 # Probabilidade obtida na tabela normal padronizada a partir do valor de Z
+# A probabilidade de uma pessoa, selecionada ao acaso, ter menos de 1,80 metros é de 84,13%
