@@ -37,4 +37,6 @@ z = (a - media) / desv_padrao
 
 probabilidade = norm.cdf(z)
 # 0.8413447460685431
-# A probabilidade de uma pessoa, selecionada ao acaso, ter menos de 1,80 metros é de 84,13%
+# A. probabilidade de uma pessoa, selecionada ao acaso, ter menos de 1,80 metros é de 84,13%
+
+print(probabilidade)
