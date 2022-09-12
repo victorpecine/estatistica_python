@@ -35,5 +35,6 @@ a = 1.8
 z = (a - media) / desv_padrao
 # 1.0000000000000009
 
-probabilidade = 0.8413 # Probabilidade obtida na tabela normal padronizada a partir do valor de Z
+probabilidade = norm.cdf(z)
+# 0.8413447460685431
 # A probabilidade de uma pessoa, selecionada ao acaso, ter menos de 1,80 metros é de 84,13%
