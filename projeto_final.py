@@ -2,6 +2,7 @@
 
 
 import pandas as pd
+from scipy.stats import norm
 
 
 df_ibge = pd.read_csv('dados.csv') # 76840 linhas, 7 colunas
@@ -31,4 +32,17 @@ media = df_renda_cincok.mean()
 media = round(media, 2)
 # R$ 1426.54
 
-print(desv_padrao)
+
+# Tamanho da amostra para população infinita
+e = 10
+
+area_dist_normal = 0.5 + (0.95 / 2)
+# 0.975
+
+z = norm.ppf(area_dist_normal)
+# 1.959963984540054
+
+n = (z * (desv_padrao / e))**2 # Tamanho da amostra
+n = int(n.round())
+
+print(n)
