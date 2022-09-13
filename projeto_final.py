@@ -4,6 +4,7 @@
 import pandas as pd
 from scipy.stats import norm
 import numpy as np
+import matplotlib.pyplot as plt
 
 
 df_ibge = pd.read_csv('dados.csv') # 76840 linhas, 7 colunas
@@ -53,4 +54,18 @@ n = int(n.round())
 
 # Intervalo de confiaça
 intervalo = norm.interval(alpha=confianca, loc=media, scale=desv_padrao / np.sqrt(n))
-print(intervalo)
+# (1416.540047028026, 1436.539952971974)
+
+
+# Gráfico de dispersão da média
+tamanho_simulacao = 1000
+
+medias = [df_renda_cincok.sample(n = n).mean() for i in range(1, tamanho_simulacao)]
+medias = pd.DataFrame(medias)
+
+ax = medias.plot(style = '.')
+ax.figure.set_size_inches(12, 6)
+ax.hlines(y = media, xmin = 0, xmax = tamanho_simulacao, colors='black', linestyles='dashed')
+ax.hlines(y = intervalo[0], xmin = 0, xmax = tamanho_simulacao, colors='red', linestyles='dashed')
+ax.hlines(y = intervalo[1], xmin = 0, xmax = tamanho_simulacao, colors='red', linestyles='dashed')
+plt.show()
