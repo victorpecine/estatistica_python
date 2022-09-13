@@ -3,6 +3,7 @@
 
 import pandas as pd
 from scipy.stats import norm
+import numpy as np
 
 
 df_ibge = pd.read_csv('dados.csv') # 76840 linhas, 7 colunas
@@ -36,13 +37,20 @@ media = round(media, 2)
 # Tamanho da amostra para população infinita
 e = 10
 
+confianca = 0.95
+
 area_dist_normal = 0.5 + (0.95 / 2)
 # 0.975
 
 z = norm.ppf(area_dist_normal)
 # 1.959963984540054
 
-n = (z * (desv_padrao / e))**2 # Tamanho da amostra
+# Tamanho da amostra
+n = (z * (desv_padrao / e))**2
 n = int(n.round())
+# 45039
 
-print(n)
+
+# Intervalo de confiaça
+intervalo = norm.interval(alpha=confianca, loc=media, scale=desv_padrao / np.sqrt(n))
+print(intervalo)
