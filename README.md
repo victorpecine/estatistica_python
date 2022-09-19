@@ -5,6 +5,7 @@
 2. Medidas de tendência central
 3. Medidas separatrizes
 4. Medidas de dispersão
+5. Testes de hipóteses
 
 ## Programas
 * Python 3.10.4
