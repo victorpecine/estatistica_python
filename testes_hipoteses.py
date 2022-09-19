@@ -7,7 +7,8 @@
 
 import pandas as pd
 import numpy as np
-from scipy.stats import norm,normaltest
+from scipy.stats import norm
+from statsmodels.stats.weightstats import ztest
 
 
 amostras = [509, 505, 495, 510, 496, 509, 497, 502, 503, 505, 
@@ -42,6 +43,8 @@ z_alpha_2 = norm.ppf(probabilidade)
 z = (media_amostra - media) / (desvio_padrao_amostra / np.sqrt(n))
 # 5.109559775991877 - área de rejeição do teste
 
+
+# Valor crítico z
 if z <= -z_alpha_2 or z >= z_alpha_2:
     print('Hipótese nula rejeitada pelo valor crítico z')
 else:
@@ -50,3 +53,20 @@ else:
 # Hipótese nula rejeitada pelo valor crítico z
 # Conclusão: Como a média amostral é significativamente maior que 500 ml, rejeitamos H0.
 # Neste caso, devem ser tomadas providências para ajustar o maquinário que preenche as embalagens.
+
+
+# Valor p_valor
+p_valor = 2 * (norm.sf(z))
+# 3.2291031715203644e-07
+
+if p_valor <= significancia:
+    print('Hipótese nula rejeitada pelo valor p')
+else:
+    print('Hipótese nula aceita pelo valor p')
+
+# Hipótese nula rejeitada pelo valor p
+
+# Obter z e p_valor pelo statsmodels.stats.weightstats
+z, p_valor = ztest(x1 = df_amostra, value = media)
+# z = 5.10955978
+# p_valor = 3.22910317e-07
