@@ -1,72 +1,30 @@
-# A empresa Suco Bom produz sucos de frutas em embalagens de 500 ml. Seu processo de produção é quase todo automatizado e as embalagens de sucos são preenchidas por uma máquina que às vezes apresenta um certo desajuste, levando a erros no preenchimento das embalagens para mais ou menos conteúdo. Quando o volume médio cai abaixo de 500 ml, a empresa se preocupa em perder vendas e ter problemas com os orgãos fiscalizadores. Quando o volume passa de 500 ml, a empresa começa a se preocupar com prejuízos no processo de produção.
+# Um famoso fabricante de refrigerantes alega que uma lata de 350 ml de seu principal produto contém, no máximo, 37 gramas de açúcar. Esta alegação nos leva a entender que a quantidade média de açúcar em uma lata de refrigerante deve ser igual ou menor que 37 g.
 
-# O setor de controle de qualidade da empresa Suco Bom extrai, periodicamente, amostras de 50 embalagens para monitorar o processo de produção. Para cada amostra, é realizado um teste de hipóteses para avaliar se o maquinário se desajustou. A equipe de controle de qualidade assume um nível de significância de 5%.
+# Um consumidor desconfiado e com conhecimentos em inferência estatística resolve testar a alegação do fabricante e seleciona, aleatóriamente, em um conjunto de estabelecimentos distintos, uma amostra de 25 latas do refrigerante em questão. Utilizando o equipamento correto o consumidor obteve as quantidades de açúcar em todas as 25 latas de sua amostra. 
 
-# Suponha agora que uma amostra de 50 embalagens foi selecionada e que a média amostral observada foi de 503,24 ml. Esse valor de média amostral é suficientemente maior que 500 ml para nos fazer rejeitar a hipótese de que a média do processo é de 500 ml ao nível de significância de 5%?
+# Assumindo que essa população se distribua aproximadamente como uma normal e considerando um nível de significância de 5%, é possível aceitar como válida a alegação do fabricante?
 
 
 import pandas as pd
-import numpy as np
-from scipy.stats import norm
-from statsmodels.stats.weightstats import ztest
+from scipy.stats import t as t_student
 
 
-amostras = [509, 505, 495, 510, 496, 509, 497, 502, 503, 505, 
-           501, 505, 510, 505, 504, 497, 506, 506, 508, 505, 
-           497, 504, 500, 498, 506, 496, 508, 497, 503, 501, 
-           503, 506, 499, 498, 509, 507, 503, 499, 509, 495, 
-           502, 505, 504, 509, 508, 501, 505, 497, 508, 507]
+tabela_t_student = pd.DataFrame(
+    [], 
+    index=[i for i in range(1, 31)],
+    columns = [i / 100 for i in range(10, 0, -1)]
+)
 
-media = 500
+for index in tabela_t_student.index:
+    for column in tabela_t_student.columns:
+        tabela_t_student.loc[index, column] = t_student.ppf(1 - float(column) / 2, index)
 
-df_amostra = pd.DataFrame(amostras, columns=['amostra'])
+index=[('Graus de Liberdade (n - 1)', i) for i in range(1, 31)]
+tabela_t_student.index = pd.MultiIndex.from_tuples(index)
 
-media_amostra = df_amostra.mean()[0]
-# 503.24
+columns = [("{0:0.3f}".format(i / 100), "{0:0.3f}".format((i / 100) / 2)) for i in range(10, 0, -1)]
+tabela_t_student.columns = pd.MultiIndex.from_tuples(columns)
 
-desvio_padrao_amostra = df_amostra.std()[0]
-# 4.483803050527347
+tabela_t_student.rename_axis(['Bicaudal', 'Unicaudal'], axis=1, inplace = True)
 
-significancia = 0.05
-
-confianca = 1 - significancia
-
-n = 50
-
-probabilidade = (0.5 + (confianca / 2))
-# 0.975 - área de aceitação do teste
-
-z_alpha_2 = norm.ppf(probabilidade)
-# 1.959963984540054
-
-# Cálculo da estatística-teste
-z = (media_amostra - media) / (desvio_padrao_amostra / np.sqrt(n))
-# 5.109559775991877 - área de rejeição do teste
-
-
-# Valor crítico z
-if z <= -z_alpha_2 or z >= z_alpha_2:
-    print('Hipótese nula rejeitada pelo valor crítico z')
-else:
-    print('Hipótese nula aceita pelo valor crítico z')
-
-# Hipótese nula rejeitada pelo valor crítico z
-# Conclusão: Como a média amostral é significativamente maior que 500 ml, rejeitamos H0.
-# Neste caso, devem ser tomadas providências para ajustar o maquinário que preenche as embalagens.
-
-
-# Valor p_valor
-p_valor = 2 * (norm.sf(z))
-# 3.2291031715203644e-07
-
-if p_valor <= significancia:
-    print('Hipótese nula rejeitada pelo valor p')
-else:
-    print('Hipótese nula aceita pelo valor p')
-
-# Hipótese nula rejeitada pelo valor p
-
-# Obter z e p_valor pelo statsmodels.stats.weightstats
-z, p_valor = ztest(x1 = df_amostra, value = media)
-# z = 5.10955978
-# p_valor = 3.22910317e-07
+print(tabela_t_student)
