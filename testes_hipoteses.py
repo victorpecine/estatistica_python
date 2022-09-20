@@ -1,96 +1,90 @@
-# Um famoso fabricante de refrigerantes alega que uma lata de 350 ml de seu principal produto contém, no máximo, 37 gramas de açúcar. Esta alegação nos leva a entender que a quantidade média de açúcar em uma lata de refrigerante deve ser igual ou menor que 37 g.
+# Em nosso dataset temos os rendimento dos chefes de domicílio obtidos da Pesquisa Nacional por Amostra de Domicílios - PNAD no ano de 2015. Um problema bastante conhecido em nosso país diz respeito a desigualdade de renda, principalmente entre homens e mulheres.
 
-# Um consumidor desconfiado e com conhecimentos em inferência estatística resolve testar a alegação do fabricante e seleciona, aleatóriamente, em um conjunto de estabelecimentos distintos, uma amostra de 25 latas do refrigerante em questão. Utilizando o equipamento correto o consumidor obteve as quantidades de açúcar em todas as 25 latas de sua amostra. 
-
-# Assumindo que essa população se distribua aproximadamente como uma normal e considerando um nível de significância de 5%, é possível aceitar como válida a alegação do fabricante?
+# Duas amostras aleatórias, uma de 500 homens e outra com 500 mulheres, foram selecionadas em nosso dataset. Com o objetivo de comprovar tal desigualdade, teste a igualdade das médias entre estas duas amostras com um nível de significância de 1%.
 
 
 import pandas as pd
-from scipy.stats import t as t_student
 import numpy as np
-from statsmodels.stats.weightstats import DescrStatsW
+from scipy.stats import norm
 
 
-tabela_t_student = pd.DataFrame(
-    [], 
-    index=[i for i in range(1, 31)],
-    columns = [i / 100 for i in range(10, 0, -1)]
-)
+df_ibge = pd.read_csv('dados/dados.csv') # 76840 linhas, 7 colunas
 
-for index in tabela_t_student.index:
-    for column in tabela_t_student.columns:
-        tabela_t_student.loc[index, column] = t_student.ppf(1 - float(column) / 2, index)
+# Contagem de dados nulos do dataframe
+df_ibge.isnull().sum()
 
-index=[('Graus de Liberdade (n - 1)', i) for i in range(1, 31)]
-tabela_t_student.index = pd.MultiIndex.from_tuples(index)
+# Ajuste dos nomes das colunas
+df_ibge.columns = df_ibge.columns.str.lower()
 
-columns = [("{0:0.3f}".format(i / 100), "{0:0.3f}".format((i / 100) / 2)) for i in range(10, 0, -1)]
-tabela_t_student.columns = pd.MultiIndex.from_tuples(columns)
-
-tabela_t_student.rename_axis(['Bicaudal', 'Unicaudal'], axis=1, inplace = True)
+df_ibge.rename(columns={'anos de estudo': 'anos_estudo'}, inplace=True)
 
 
-amostra = [37.27, 36.42, 34.84, 34.60, 37.49, 
-           36.53, 35.49, 36.90, 34.52, 37.30, 
-           34.99, 36.55, 36.29, 36.06, 37.42, 
-           34.47, 36.70, 35.86, 36.80, 36.92, 
-           37.04, 36.39, 37.32, 36.64, 35.45]
+# Amostras de renda por sexo
+homens = df_ibge.query('sexo == 0').sample(n=500, random_state=101).renda
 
-df_amostra = pd.DataFrame(amostra, columns=['amostra'])
-
-media_amostra = df_amostra.mean()[0]
-# 36.250400000000006
-
-desvio_padrao_amostra = df_amostra.std()[0]
-# 0.9667535018469453
-
-media = 37
-
-significancia = 0.05
-
-confianca = 1 - significancia
-
-n = 25
-
-graus_de_liberdade = n - 1
-
-t_alpha = t_student.ppf(confianca, graus_de_liberdade)
-# 1.7108820799094275
+mulheres = df_ibge.query('sexo == 1').sample(n=500, random_state=101).renda
 
 
-# Cálculo de estatística-teste para área de aceitação e rejeição
-t = (media_amostra - media) / (desvio_padrao_amostra / np.sqrt(n))
-# -3.876893119952045
+media_amostra_M = mulheres.mean()
+# 1357.528
+
+desvio_padrao_amostra_M = mulheres.std()
+# 1569.9011907484578
 
 
-# Hipótese H0
-# u <= 37
+media_amostra_H = homens.mean()
+# 2142.608
 
-# Hipótese H1
-# u > 37
+desvio_padrao_amostra_H = homens.std()
+# 2548.050802499875
 
-# Teste valor crítico t
-if t >= t_alpha:
-    print('Hipótese H0 rejeitada pelo valor crítico t\nAs latas de refrigerante podem ter mais de 37 g de açúcar')
+
+significância = 0.01
+
+confianca = 1 - significância
+
+n_M = 500
+
+n_H = 500
+
+d_0 = n_H - n_M # Diferença entre as medias
+
+
+# Hipóteses para teste unicaudal superior
+# u1 = média de renda homens
+# u2 = media de renda mulheres
+
+# Hipótese nula H0 -> n_H - n_M <= 0
+# H1 -> n_H - n_M > 0
+
+if n_H - n_M <= d_0:
+    print('Teste unicaudal superior confirmado pela hipótese H0')
 else:
-    print('Hipótese H0 aceita pelo valor crítico t\nAs latas de refrigerante não têm mais de 37 g de açúcar')
+    print('Teste unicaudal superior desconsiderado pela hipótese H0')
 
-# Hipótese H0 aceita
-# As latas de refrigerante não têm mais de 37 g de açúcar
+# Teste unicaudal superior confirmado pela hipótese H0
 
 
-# Teste valor p_valor
-test = DescrStatsW(amostra)
+probabilidade = confianca
+# 0.99
 
-t, p_valor, grau_liberdade = test.ttest_mean(value=media, alternative='larger')
-# t = -3.8768931199520447
-# p_valor = 0.999640617030382
-# grau_liberdade = 24.0
+z_alpha = norm.ppf(probabilidade)
+# 2.3263478740408408
 
-if p_valor <= significancia:
-    print('Hipótese H0 rejeitada pelo valor p\nAs latas de refrigerante podem ter mais de 37 g de açúcar')
+
+# Cálculo da estatística-teste e verificação desse valor com as áreas de aceitação e rejeição do teste
+numerador = (media_amostra_H - media_amostra_M) - d_0
+
+denominador = np.sqrt((desvio_padrao_amostra_H ** 2 / n_H) + (desvio_padrao_amostra_M ** 2 / n_M))
+
+z = numerador / denominador
+# 5.86562005776475
+
+
+# Teste valor crítico z
+if z >= z_alpha:
+    print('Hipótese nula H0 rejeitada pelo valor crítico z\nA média de renda dos homens é maior que a média de renda das mulheres')
 else:
-    print('Hipótese H0 aceita pelo valor p\nAs latas de refrigerante não têm mais de 37 g de açúcar')
+    print('Hipótese nula H0 aceita pelo valor crítico z\nA média de renda dos homens é menor ou igual à média de renda das mulheres')
 
-# Hipótese H0 aceita pelo valor p
-# As latas de refrigerante não têm mais de 37 g de açúcar
+# A média de renda dos homens é maior que a média de renda das mulheres
