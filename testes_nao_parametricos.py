@@ -8,7 +8,7 @@
 
 
 import pandas as pd
-from scipy.stats import chi
+from scipy.stats import chi, chisquare
 
 
 tabela_t_chi_2 = pd.DataFrame(
@@ -24,4 +24,40 @@ for index in tabela_t_chi_2.index:
 tabela_t_chi_2.index.name='Graus de Liberdade'
 tabela_t_chi_2.rename_axis(['p'], axis=1, inplace = True)
 
-print(tabela_t_chi_2)
+
+
+freq_observada = [17, 33]
+
+freq_esperada = [25, 25]
+
+significancia = 0.05
+
+confianca = 1 - significancia
+
+k = 2 # Número de eventos possíveis
+
+graus_de_liberdade = k - 1
+
+
+# Hipóteses
+# H0 -> freq_cara = freq_coroa
+# H1 -> freq_cara != freq_coroa
+
+qui_quadrado_alpha = chi.ppf(confianca, graus_de_liberdade) ** 2
+# 3.8414588206941245
+
+
+# Cálculo da estatística-teste e verificação desse valor com as áreas de aceitação e rejeição do teste
+qui_quadrado, p_valor = chisquare(f_obs=freq_observada, f_exp=freq_esperada)
+# qui_quadrado = 5.12
+# p_valor = 0.023651616655356
+
+
+# Valor crítico qui
+if qui_quadrado >= qui_quadrado_alpha:
+    print('Hipótese nula H0 rejeitada pelo valor crítico qui\nA moeda utilizada não é honesta e deve ser trocada')
+else:
+    print('Hipótese nula H0 aceita pelo valor crítico qui\nA moeda utilizada é honesta e não precisa ser trocada')
+
+# Hipótese nula H0 rejeitada pelo valor crítico qui
+# A moeda utilizada não é honesta e deve ser trocada
