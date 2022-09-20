@@ -27,4 +27,4 @@ tabela_t_student.columns = pd.MultiIndex.from_tuples(columns)
 
 tabela_t_student.rename_axis(['Bicaudal', 'Unicaudal'], axis=1, inplace = True)
 
-print(tabela_t_student)
+tabela_t_student.to_csv('dados/tabela_t_student.csv', index=False)
