@@ -61,3 +61,13 @@ else:
 
 # Hipótese nula H0 rejeitada pelo valor crítico qui
 # A moeda utilizada não é honesta e deve ser trocada
+
+
+# Valor p
+if p_valor <= significancia:
+    print('Hipótese nula H0 rejeitada pelo valor p\nA moeda utilizada não é honesta e deve ser trocada')
+else:
+    print('Hipótese nula H0 aceita pelo valor p\nA moeda utilizada é honesta e não precisa ser trocada')
+
+# Hipótese nula H0 rejeitada pelo valor p
+# A moeda utilizada não é honesta e deve ser trocada
