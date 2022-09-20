@@ -7,6 +7,7 @@
 
 import pandas as pd
 from scipy.stats import t as t_student
+import numpy as np
 
 
 tabela_t_student = pd.DataFrame(
@@ -27,4 +28,51 @@ tabela_t_student.columns = pd.MultiIndex.from_tuples(columns)
 
 tabela_t_student.rename_axis(['Bicaudal', 'Unicaudal'], axis=1, inplace = True)
 
-tabela_t_student.to_csv('dados/tabela_t_student.csv', index=False)
+
+amostra = [37.27, 36.42, 34.84, 34.60, 37.49, 
+           36.53, 35.49, 36.90, 34.52, 37.30, 
+           34.99, 36.55, 36.29, 36.06, 37.42, 
+           34.47, 36.70, 35.86, 36.80, 36.92, 
+           37.04, 36.39, 37.32, 36.64, 35.45]
+
+df_amostra = pd.DataFrame(amostra, columns=['amostra'])
+
+media_amostra = df_amostra.mean()[0]
+# 36.250400000000006
+
+desvio_padrao_amostra = df_amostra.std()[0]
+# 0.9667535018469453
+
+media = 37
+
+significancia = 0.05
+
+confianca = 1 - significancia
+
+n = 25
+
+graus_de_liberdade = n - 1
+
+t_alpha = t_student.ppf(confianca, graus_de_liberdade)
+# 1.7108820799094275
+
+
+# Cálculo de estatística-teste para área de aceitação e rejeição
+t = (media_amostra - media) / (desvio_padrao_amostra / np.sqrt(n))
+# -3.876893119952045
+
+
+# Hipótese H0
+# u <= 37
+
+# Hipótese H1
+# u > 37
+
+# Teste valor crítico t
+if t >= t_alpha:
+    print('Hipótese H0 rejeitada pelo valor crítico t\nAs latas de refrigerante podem ter mais de 37 g de açúcar')
+else:
+    print('Hipótese H0 aceita\nAs latas de refrigerante não têm mais de 37 g de açúcar')
+
+# Hipótese H0 aceita
+# As latas de refrigerante não têm mais de 37 g de açúcar
