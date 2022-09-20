@@ -1,11 +1,13 @@
 # Em nosso dataset temos os rendimento dos chefes de domicílio obtidos da Pesquisa Nacional por Amostra de Domicílios - PNAD no ano de 2015. Um problema bastante conhecido em nosso país diz respeito a desigualdade de renda, principalmente entre homens e mulheres.
 
-# Duas amostras aleatórias, uma de 500 homens e outra com 500 mulheres, foram selecionadas em nosso dataset. Com o objetivo de comprovar tal desigualdade, teste a igualdade das médias entre estas duas amostras com um nível de significância de 1%.
+# Duas amostras aleatórias, uma de 500 homens e outra com 500 mulheres, foram selecionadas em nosso dataset. Com o objetivo de comprovar tal desigualdade, teste a igualdade das médias entre estas duas amostras com um nível de significancia de 1%.
 
 
+from cgi import test
 import pandas as pd
 import numpy as np
 from scipy.stats import norm
+from statsmodels.stats.weightstats import DescrStatsW, CompareMeans
 
 
 df_ibge = pd.read_csv('dados/dados.csv') # 76840 linhas, 7 colunas
@@ -39,9 +41,9 @@ desvio_padrao_amostra_H = homens.std()
 # 2548.050802499875
 
 
-significância = 0.01
+significancia = 0.01
 
-confianca = 1 - significância
+confianca = 1 - significancia
 
 n_M = 500
 
@@ -87,4 +89,24 @@ if z >= z_alpha:
 else:
     print('Hipótese nula H0 aceita pelo valor crítico z\nA média de renda dos homens é menor ou igual à média de renda das mulheres')
 
+# A média de renda dos homens é maior que a média de renda das mulheres
+
+
+# Teste valor p
+test_H = DescrStatsW(homens)
+
+test_M = DescrStatsW(mulheres)
+
+test_medias = CompareMeans(test_H, test_M)
+
+z, p_valor = test_medias.ztest_ind(alternative='larger', value=d_0)
+# z = 5.865620057764754
+# p_valor = 2.2372867859458255e-09
+
+if p_valor <= significancia:
+    print('Hipótese H0 rejeitada pelo valor p\nA média de renda dos homens é maior que a média de renda das mulheres')
+else:
+    print('Hipótese H0 aceita pelo valor p\nA média de renda dos homens é menor ou igual à média de renda das mulheres')
+
+# Hipótese H0 rejeitada pelo valor p
 # A média de renda dos homens é maior que a média de renda das mulheres
