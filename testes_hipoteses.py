@@ -8,6 +8,7 @@
 import pandas as pd
 from scipy.stats import t as t_student
 import numpy as np
+from statsmodels.stats.weightstats import DescrStatsW
 
 
 tabela_t_student = pd.DataFrame(
@@ -72,7 +73,24 @@ t = (media_amostra - media) / (desvio_padrao_amostra / np.sqrt(n))
 if t >= t_alpha:
     print('Hipótese H0 rejeitada pelo valor crítico t\nAs latas de refrigerante podem ter mais de 37 g de açúcar')
 else:
-    print('Hipótese H0 aceita\nAs latas de refrigerante não têm mais de 37 g de açúcar')
+    print('Hipótese H0 aceita pelo valor crítico t\nAs latas de refrigerante não têm mais de 37 g de açúcar')
 
 # Hipótese H0 aceita
+# As latas de refrigerante não têm mais de 37 g de açúcar
+
+
+# Teste valor p_valor
+test = DescrStatsW(amostra)
+
+t, p_valor, grau_liberdade = test.ttest_mean(value=media, alternative='larger')
+# t = -3.8768931199520447
+# p_valor = 0.999640617030382
+# grau_liberdade = 24.0
+
+if p_valor <= significancia:
+    print('Hipótese H0 rejeitada pelo valor p\nAs latas de refrigerante podem ter mais de 37 g de açúcar')
+else:
+    print('Hipótese H0 aceita pelo valor p\nAs latas de refrigerante não têm mais de 37 g de açúcar')
+
+# Hipótese H0 aceita pelo valor p
 # As latas de refrigerante não têm mais de 37 g de açúcar
