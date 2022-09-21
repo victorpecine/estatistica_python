@@ -2,7 +2,7 @@
 
 
 import pandas as pd
-from scipy.stats import norm
+from scipy.stats import norm, wilcoxon
 import numpy as np
 
 
@@ -84,6 +84,27 @@ Z = (T - mu_T) / sigma_T
 
 # Teste valor crítico z
 if Z >= z_alpha_2 or Z <= -abs(z_alpha_2):
+    print('*' * 50)
     print('Hipótese H0 rejeitada pelo valor crítico z\nA média de cigarros antes do teste é maior que a média após o teste')
+    print('*' * 50)
+    print('Resultado satisfatório para o novo tratamento')
 else:
+    print('*' * 50)
     print('Hipótese H0 aceita pelo valor crítico z\nA média de cigarros antes do teste é menor que a média após o teste')
+    print('*' * 50)
+    print('Resultado insatisfatório para o novo tratamento')
+
+
+# Teste do valor p
+T, p_valor = wilcoxon(df_fumo['antes'], df_fumo['depois'])
+
+if p_valor <= significancia:
+    print('*' * 50)
+    print('Hipótese H0 rejeitada pelo valor p\nA média de cigarros antes do teste é maior que a média após o teste')
+    print('*' * 50)
+    print('Resultado satisfatório para o novo tratamento')
+else:
+    print('*' * 50)
+    print('Hipótese H0 aceita pelo valor p\nA média de cigarros antes do teste é menor que a média após o teste')
+    print('*' * 50)
+    print('Resultado insatisfatório para o novo tratamento')
