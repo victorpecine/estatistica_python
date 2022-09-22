@@ -4,7 +4,7 @@
 
 
 import pandas as pd
-from scipy.stats import t as t_student
+from scipy.stats import t as t_student, mannwhitneyu
 import numpy as np
 
 
@@ -140,4 +140,22 @@ else:
     print('Hipótese nula aceita pelo teste do valor crítico t\nA média de renda das mulheres é igual a média de renda dos homens')
 
 # Hipótese nula rejeitada pelo teste do valor crítico t
+# A média de renda das mulheres é menor que a média de renda dos homens
+
+
+# Teste pelo valor p
+u, p_valor = mannwhitneyu(mulheres, homens, alternative='less')
+# u = 8.0
+# p_valor = 0.022221119551528605
+
+if p_valor <= significancia:
+    print('*' * 50)
+    print('Hipótese nula rejeitada pelo teste do valor p\nA média de renda das mulheres é menor que a média de renda dos homens')
+    print('*' * 50)
+else:
+    print('*' * 50)
+    print('Hipótese nula aceita pelo teste do valor p\nA média de renda das mulheres é igual a média de renda dos homens')
+    print('*' * 50)
+
+# Hipótese nula rejeitada pelo teste do valor p
 # A média de renda das mulheres é menor que a média de renda dos homens
