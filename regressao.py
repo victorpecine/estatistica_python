@@ -52,3 +52,38 @@ ax.figure.set_size_inches(12, 6)
 ax.set_title('Box plot', fontsize=20)
 
 ax.set_xlabel('Temperatura média', fontsize=16)
+
+
+# Regressão linear
+Y = df_cervejas.Y
+
+X = sm.add_constant(df_cervejas.X)
+
+regressao = sm.OLS(Y, X).fit()
+# OLS Regression Results
+# ==============================================================================
+# Dep. Variable:                      Y   R-squared:                       0.330
+# Model:                            OLS   Adj. R-squared:                  0.328
+# Method:                 Least Squares   F-statistic:                     178.9
+# Date:                Mon, 26 Sep 2022   Prob (F-statistic):           1.87e-33
+# Time:                        18:12:25   Log-Likelihood:                -3506.3
+# No. Observations:                 365   AIC:                             7017.
+# Df Residuals:                     363   BIC:                             7024.
+# Df Model:                           1
+# Covariance Type:            nonrobust
+# ==============================================================================
+#                  coef    std err          t      P>|t|      [0.025      0.975]
+# ------------------------------------------------------------------------------
+# const       8528.9073   1275.363      6.687      0.000    6020.880     1.1e+04
+# X            794.8825     59.423     13.377      0.000     678.027     911.738
+# ==============================================================================
+# Omnibus:                       11.300   Durbin-Watson:                   1.623
+# Prob(Omnibus):                  0.004   Jarque-Bera (JB):                9.673
+# Skew:                           0.324   Prob(JB):                      0.00793
+# Kurtosis:                       2.534   Cond. No.                         145.
+# ==============================================================================
+
+
+df_cervejas['Y_previsto'] = regressao.predict()
+
+print(df_cervejas)
