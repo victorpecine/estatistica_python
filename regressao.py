@@ -102,7 +102,7 @@ df_cervejas['Y_previsto'] = regressao.predict()
 # Previsões
 # Qual seria o consumo de cerveja para um dia com temperatura média de 42° C?
 
-consumo_42_graus = regressao.predict([1, 42])
+consumo_42_graus = regressao.predict([1, 42])[0]
 # 41913.97383817
 
 
@@ -121,5 +121,3 @@ df_cervejas['residuos'] = regressao.resid
 # 362  22309  21.68  25761.960686 -3452.960686
 # 363  20467  21.38  25523.495925 -5056.495925
 # 364  22446  24.76  28210.198900 -5764.198900
-
-print(df_cervejas)
