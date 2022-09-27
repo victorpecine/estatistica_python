@@ -2,6 +2,7 @@
 
 
 import pandas as pd
+import seaborn as sns
 
 
 df_consumo = pd.read_csv('dados/consumo_cerveja.csv', sep=';')
@@ -21,5 +22,26 @@ estats_descits = df_consumo.describe()
 
 # Matriz de correlação (método de Pearson)
 correlacao = df_consumo.corr()
+#             temp_media  temp_min  temp_max     chuva       fds   consumo
+# temp_media    1.000000  0.862752  0.922513  0.024416 -0.050803  0.574615
+# temp_min      0.862752  1.000000  0.672929  0.098625 -0.059534  0.392509
+# temp_max      0.922513  0.672929  1.000000 -0.049305 -0.040258  0.642672
+# chuva         0.024416  0.098625 -0.049305  1.000000  0.001587 -0.193784
+# fds          -0.050803 -0.059534 -0.040258  0.001587  1.000000  0.505981
+# consumo       0.574615  0.392509  0.642672 -0.193784  0.505981  1.000000
 
-print(correlacao)
+# A maior correlação está entre a temperatura máxima e o consumo
+# A temperatura média, temperatura mínima e temperatura máxima têm alta correlação. Por serem variáveis explicativas, deve-se evitar trabalhar com elas em conjunto
+
+
+# Gráfico de relações
+ax = sns.pairplot(df_consumo)
+
+ax.savefig('graficos/graficos_de_relacoes.png')
+
+
+# Gráfico de relações do consumo
+
+ax_consumo = sns.pairplot(df_consumo, y_vars='consumo', x_vars=['temp_min', 'temp_media', 'temp_max', 'chuva', 'fds'])
+
+ax_consumo.savefig('graficos/graficos_de_relacoes_consumo.png')
