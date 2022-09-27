@@ -34,14 +34,8 @@ correlacao = df_consumo.corr()
 # A temperatura média, temperatura mínima e temperatura máxima têm alta correlação. Por serem variáveis explicativas, deve-se evitar trabalhar com elas em conjunto
 
 
-# Gráfico de relações
-ax = sns.pairplot(df_consumo)
-
-ax.savefig('graficos/graficos_de_relacoes.png')
-
-
 # Gráfico de relações do consumo
 
-ax_consumo = sns.pairplot(df_consumo, y_vars='consumo', x_vars=['temp_min', 'temp_media', 'temp_max', 'chuva', 'fds'])
+ax_consumo = sns.pairplot(df_consumo, y_vars='consumo', x_vars=['temp_min', 'temp_media', 'temp_max', 'chuva', 'fds'], kind='reg')
 
 ax_consumo.savefig('graficos/graficos_de_relacoes_consumo.png')
