@@ -4,6 +4,7 @@
 from pyexpat import model
 from statistics import mode
 import pandas as pd
+import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn import metrics
@@ -60,3 +61,25 @@ X_pontual = [[temp_max, chuva, fds]]
 
 y_pontual = modelo_reg_lin.predict(X_pontual)[0]
 # 26159.68166942776
+
+
+# Valor de interseção do y
+y_intercepto = modelo_reg_lin.intercept_
+# 6788.597908177384
+
+# Coeficientes
+c_temp_max, c_chuva, c_fds = modelo_reg_lin.coef_
+# 660.0188665734694
+# -62.2534155115114
+# 5099.279027698894
+
+
+# Dataframe com os coeficientes
+index = ['intercepto', 'temp_max', 'chuva', 'fds']
+
+df_coeficientes = pd.DataFrame(data=np.append(y_intercepto, modelo_reg_lin.coef_), index=index, columns=['parametros'])
+#              parametros
+# intercepto  6788.597908
+# temp_max     660.018867
+# chuva        -62.253416
+# fds         5099.279028
