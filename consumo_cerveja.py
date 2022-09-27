@@ -24,3 +24,17 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_
 
 
 modelo_reg_lin = LinearRegression().fit(X_train, y_train) # Criação do modelo de treino para regressão linear
+
+
+# Coeficiente de determinação R²
+r_quadrado = modelo_reg_lin.score(X_train, y_train)
+# 0.6992228468218
+
+
+# Previsões a partir do modelo
+y_previsto = modelo_reg_lin.predict(X_test)
+
+
+# Coeficiente de determinação R² para as previsões do modelo
+r_quadrado_previsao = metrics.r2_score(y_test, y_previsto)
+# 0.7614490385510517
