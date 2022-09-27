@@ -8,6 +8,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn import metrics
+import seaborn as sns
 
 
 df_consumo = pd.read_csv('dados/consumo_cerveja.csv', sep=';')
@@ -83,3 +84,22 @@ df_coeficientes = pd.DataFrame(data=np.append(y_intercepto, modelo_reg_lin.coef_
 # temp_max     660.018867
 # chuva        -62.253416
 # fds         5099.279028
+
+
+# Previsão para os dados de treino
+y_previsto_train = modelo_reg_lin.predict(X_train)
+
+# Gráfico de dispersão entre valor estimado e real
+ax = sns.scatterplot(x=y_previsto_train, y=y_train)
+
+ax.figure.set_size_inches(12, 6)
+
+ax.set_title('Consumo de cerveja', fontsize=16)
+
+ax.set_xlabel('Consumo estimadov(L)', fontsize=12)
+
+ax.set_ylabel('Consumo real (L)', fontsize=12)
+
+dispersao_consumo_previsto_real = ax.get_figure()
+
+dispersao_consumo_previsto_real.savefig('graficos/dispersao_consumo_previsto_real.png')
