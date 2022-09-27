@@ -1,6 +1,7 @@
 # Fonte do dataset: https://www.kaggle.com/datasets/dongeorge/beer-consumption-sao-paulo
 
 
+from multiprocessing.spawn import set_executable
 import pandas as pd
 import seaborn as sns
 
@@ -34,8 +35,15 @@ correlacao = df_consumo.corr()
 # A temperatura média, temperatura mínima e temperatura máxima têm alta correlação. Por serem variáveis explicativas, deve-se evitar trabalhar com elas em conjunto
 
 
-# Gráfico de relação com dispersão do consumo e temperatura máxima
+# Gráfico de relação com relação de três variáveis
+ax = sns.lmplot(x='temp_max', y='consumo', data=df_consumo, hue='fds', markers=['o', '*'], legend=False)
 
-ax = sns.jointplot(x='temp_max', y='consumo', data=df_consumo)
+ax.fig.suptitle('Reta de regressao\nConsumo x Temperatura máx x Final de semana', fontsize=16, y=1.10)
 
-ax.savefig('graficos/relacao_consumo_temp_max.png')
+ax.set_xlabels('Temperatura máx (°C)', fontsize=12)
+
+ax.set_ylabels('Consumo de cerveja (L)', fontsize=12)
+
+ax.add_legend(title='Fim de semana')
+
+ax.savefig('graficos/relacao_temp_max_consumo_fds.png')
