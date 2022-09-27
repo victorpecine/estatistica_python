@@ -3,6 +3,7 @@
 
 from pyexpat import model
 from statistics import mode
+from turtle import width
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -92,17 +93,11 @@ y_previsto_train = modelo_reg_lin.predict(X_train)
 residuo = y_train - y_previsto_train
 
 
-# Gráfico de dispersão entre valor estimado e residuo
-ax = sns.scatterplot(x=y_previsto_train, y=residuo, s=100)
+# Gráfico de distribuição de frequência dos resíduos
+ax = sns.displot(residuo)
 
 ax.figure.set_size_inches(12, 6)
 
-ax.set_title('Consumo de cerveja', fontsize=16)
+ax.set(title='Distribuição de frequência dos resíduos', xlabel='Litros')
 
-ax.set_xlabel('Consumo estimado (L)', fontsize=12)
-
-ax.set_ylabel('Resíduo', fontsize=12)
-
-dispersao_consumo_previsto_real = ax.get_figure()
-
-dispersao_consumo_previsto_real.savefig('graficos/dispersao_consumo_previsto_residuo.png')
+ax.savefig('graficos/dist_freq_residuos.png')
