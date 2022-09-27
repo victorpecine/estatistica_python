@@ -38,3 +38,25 @@ y_previsto = modelo_reg_lin.predict(X_test)
 # Coeficiente de determinação R² para as previsões do modelo
 r_quadrado_previsao = metrics.r2_score(y_test, y_previsto)
 # 0.7614490385510517
+
+
+# Previsão pontual
+X_pontual = X_test[0:1]
+#      temp_max  chuva  fds
+# 317      30.4   16.4    1
+
+y_pontual = modelo_reg_lin.predict(X_pontual)
+# 30931.49446532
+
+
+# Simulador simples
+temp_max = 30.5
+
+chuva = 12.2
+
+fds = 0
+
+X_pontual = [[temp_max, chuva, fds]]
+
+y_pontual = modelo_reg_lin.predict(X_pontual)[0]
+# 26159.68166942776
