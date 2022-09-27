@@ -89,17 +89,20 @@ df_coeficientes = pd.DataFrame(data=np.append(y_intercepto, modelo_reg_lin.coef_
 # Previsão para os dados de treino
 y_previsto_train = modelo_reg_lin.predict(X_train)
 
-# Gráfico de dispersão entre valor estimado e real
-ax = sns.scatterplot(x=y_previsto_train, y=y_train)
+residuo = y_train - y_previsto_train
+
+
+# Gráfico de dispersão entre valor estimado e residuo
+ax = sns.scatterplot(x=y_previsto_train, y=residuo, s=100)
 
 ax.figure.set_size_inches(12, 6)
 
 ax.set_title('Consumo de cerveja', fontsize=16)
 
-ax.set_xlabel('Consumo estimadov(L)', fontsize=12)
+ax.set_xlabel('Consumo estimado (L)', fontsize=12)
 
-ax.set_ylabel('Consumo real (L)', fontsize=12)
+ax.set_ylabel('Resíduo', fontsize=12)
 
 dispersao_consumo_previsto_real = ax.get_figure()
 
-dispersao_consumo_previsto_real.savefig('graficos/dispersao_consumo_previsto_real.png')
+dispersao_consumo_previsto_real.savefig('graficos/dispersao_consumo_previsto_residuo.png')
