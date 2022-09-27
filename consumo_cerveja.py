@@ -1,49 +1,26 @@
 # Fonte do dataset: https://www.kaggle.com/datasets/dongeorge/beer-consumption-sao-paulo
 
 
-from multiprocessing.spawn import set_executable
+from pyexpat import model
+from statistics import mode
 import pandas as pd
-import seaborn as sns
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn import metrics
 
 
 df_consumo = pd.read_csv('dados/consumo_cerveja.csv', sep=';')
 
-# Tabela de estatísticas descritivas
-estats_descits = df_consumo.describe()
-#        temp_media    temp_min    temp_max       chuva         fds       consumo
-# count  365.000000  365.000000  365.000000  365.000000  365.000000    365.000000
-# mean    21.226356   17.461370   26.611507    5.196712    0.284932  25401.367123
-# std      3.180108    2.826185    4.317366   12.417844    0.452001   4399.142703
-# min     12.900000   10.600000   14.500000    0.000000    0.000000  14343.000000
-# 25%     19.020000   15.300000   23.800000    0.000000    0.000000  22008.000000
-# 50%     21.380000   17.900000   26.900000    0.000000    0.000000  24867.000000
-# 75%     23.280000   19.600000   29.400000    3.200000    1.000000  28631.000000
-# max     28.860000   24.500000   36.500000   94.800000    1.000000  37937.000000
+# Dataset de teste e treino
+# Dividir o dataframe e duas sérias
+# Uma com a variável dependente
+# Outra com as variáveis independentes
+
+y = df_consumo['consumo']
+
+X = df_consumo[['temp_max', 'chuva', 'fds']]
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=101)
 
 
-# Matriz de correlação (método de Pearson)
-correlacao = df_consumo.corr()
-#             temp_media  temp_min  temp_max     chuva       fds   consumo
-# temp_media    1.000000  0.862752  0.922513  0.024416 -0.050803  0.574615
-# temp_min      0.862752  1.000000  0.672929  0.098625 -0.059534  0.392509
-# temp_max      0.922513  0.672929  1.000000 -0.049305 -0.040258  0.642672
-# chuva         0.024416  0.098625 -0.049305  1.000000  0.001587 -0.193784
-# fds          -0.050803 -0.059534 -0.040258  0.001587  1.000000  0.505981
-# consumo       0.574615  0.392509  0.642672 -0.193784  0.505981  1.000000
-
-# A maior correlação está entre a temperatura máxima e o consumo
-# A temperatura média, temperatura mínima e temperatura máxima têm alta correlação. Por serem variáveis explicativas, deve-se evitar trabalhar com elas em conjunto
-
-
-# Gráfico de relação com relação de três variáveis
-ax = sns.lmplot(x='temp_max', y='consumo', data=df_consumo, hue='fds', markers=['o', '*'], legend=False)
-
-ax.fig.suptitle('Reta de regressao\nConsumo x Temperatura máx x Final de semana', fontsize=16, y=1.10)
-
-ax.set_xlabels('Temperatura máx (°C)', fontsize=12)
-
-ax.set_ylabels('Consumo de cerveja (L)', fontsize=12)
-
-ax.add_legend(title='Fim de semana')
-
-ax.savefig('graficos/relacao_temp_max_consumo_fds.png')
+modelo_reg_lin = LinearRegression().fit(X_train, y_train) # Criação do modelo de treino para regressão linear
