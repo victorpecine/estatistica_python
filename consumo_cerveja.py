@@ -35,12 +35,21 @@ r_quadrado_temp_max = modelo_temp_max.score(X_train, y_train)
 
 
 # Previsões a partir do modelo
-y_prev_tem_max = modelo_temp_max.predict(X_test)
+y_prev_temp_max = modelo_temp_max.predict(X_test)
 
 
 # Coeficiente de determinação R² para as previsões do modelo
-r_quadrado_prev_temp_max = metrics.r2_score(y_test, y_prev_tem_max)
+r_quadrado_prev_temp_max = metrics.r2_score(y_test, y_prev_temp_max)
 # 0.7614490385510517
+
+# Métricas para modelo com temp_med
+# EQM = erro quadrático médio
+
+EQM_temp_max = metrics.mean_squared_error(y_test, y_prev_temp_max)
+# 5491373.840814736
+
+raiz_EQM_temp_max = np.sqrt(metrics.mean_squared_error(y_test, y_prev_temp_max))
+# 2343.368054918974
 
 
 # Previsão pontual
@@ -111,3 +120,31 @@ y_prev_temp_med = modelo_temp_med.predict(X2_test)
 r_quadrado_prev_temp_med = metrics.r2_score(y2_test, y_prev_temp_med)
 # 0.713806869211146
 # O modelo com temperatura máxima tem R² ajustado = 0.7614490385510517 e explica melhor a variação do consumo de cerveja
+
+
+# Métricas para modelo com temp_med
+# EQM = erro quadrático médio
+
+EQM_temp_med = metrics.mean_squared_error(y2_test, y_prev_temp_med)
+# 6588082.740429937
+
+raiz_EQM_temp_med = np.sqrt(metrics.mean_squared_error(y2_test, y_prev_temp_med))
+# 2566.7260742880094
+
+
+metricas_temp_med = pd.DataFrame([r_quadrado_temp_med, EQM_temp_med, raiz_EQM_temp_med], ['R^2', 'EQM', 'sqrt_EQM'], columns=['metricas_temp_med'])
+#           metricas_temp_med
+# R^2            6.303838e-01
+# EQM            6.588083e+06
+# sqrt_EQM       2.566726e+03
+
+
+metricas_temp_max = pd.DataFrame([r_quadrado_temp_max, EQM_temp_max, raiz_EQM_temp_max], ['R^2', 'EQM', 'sqrt_EQM'], columns=['metricas_temp_max'])
+#           metricas_temp_max
+# R^2            6.992228e-01
+# EQM            5.491374e+06
+# sqrt_EQM       2.343368e+03
+
+
+# Os erros de previsão (EQM) são menores no modelo com temperatura máxima
+# A temperatura máxima está mais correlacionada com o consumo de cerveja
