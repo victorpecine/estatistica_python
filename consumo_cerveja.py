@@ -9,7 +9,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn import metrics
-import seaborn as sns
+import pickle
 
 
 df_consumo = pd.read_csv('dados/consumo_cerveja.csv', sep=';')
@@ -148,3 +148,11 @@ metricas_temp_max = pd.DataFrame([r_quadrado_temp_max, EQM_temp_max, raiz_EQM_te
 
 # Os erros de previsão (EQM) são menores no modelo com temperatura máxima
 # A temperatura máxima está mais correlacionada com o consumo de cerveja
+
+
+# Salva o modelo
+output = open('modelos/modelo_consumo_temp_max_chuva_fds', 'wb') # wb = write binary
+
+pickle.dump(modelo_temp_max, output)
+
+output.close
