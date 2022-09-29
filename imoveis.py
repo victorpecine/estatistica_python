@@ -1,6 +1,8 @@
 import pandas as pd
 import seaborn as sns
 import numpy as np
+from sklearn.model_selection import train_test_split
+import statsmodels.api as sm
 
 
 sns.set_palette('OrRd')
@@ -48,7 +50,7 @@ valores_boxplot.set_xlabel('R$', fontsize=12)
 
 valores_imoveis_boxplot = valores_boxplot.get_figure()
 
-valores_imoveis_boxplot.savefig('graficos/valores_imoveis_boxplot.png')
+# valores_imoveis_boxplot.savefig('graficos/valores_imoveis_boxplot.png')
 
 
 # Distribuição de frequência
@@ -62,7 +64,7 @@ valores_dist_freq.set_xlabels('Valor em milhões de reais', fontsize=14)
 
 valores_dist_freq.set_ylabels('Ocorrências', fontsize=14)
 
-valores_dist_freq.savefig('graficos/valores_imoveis_dist_freq.png')
+# valores_dist_freq.savefig('graficos/valores_imoveis_dist_freq.png')
 
 
 # Dispersão entre as variáveis
@@ -72,7 +74,7 @@ disper_variaveis = sns.pairplot(data=df_imoveis, y_vars='valor', x_vars=['area',
 
 disper_variaveis.fig.suptitle('Disperção entre as variáveis', fontsize=12)
 
-disper_variaveis.savefig('graficos/imoveis_disper_entre_variaveis')
+# disper_variaveis.savefig('graficos/imoveis_disper_entre_variaveis')
 
 
 # Transformação das variáveis para distribuição normal
@@ -99,7 +101,7 @@ valores_nova_dist_freq.set_xlabels('Log do valor', fontsize=14)
 
 valores_nova_dist_freq.set_ylabels('Ocorrências', fontsize=14)
 
-valores_nova_dist_freq.savefig('graficos/valores_imoveis_nova_dist_freq.png')
+# valores_nova_dist_freq.savefig('graficos/valores_imoveis_nova_dist_freq.png')
 
 
 # Nova dispersão entre as variáveis
@@ -107,4 +109,49 @@ nova_disper_variaveis = sns.pairplot(data=df_imoveis, y_vars='log_valor', x_vars
 
 nova_disper_variaveis.fig.suptitle('Nova disperção entre as variáveis', fontsize=12)
 
-nova_disper_variaveis.savefig('graficos/imoveis_nova_disper_entre_variaveis')
+# nova_disper_variaveis.savefig('graficos/imoveis_nova_disper_entre_variaveis')
+
+
+# Datasets de teste e treino
+
+# Series da variável dependente
+y = df_imoveis['log_valor']
+
+X = df_imoveis[['log_area', 'log_dist_praia', 'log_dist_farmacia']]
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1240)
+# 20% dos dados para teste
+# 80% dos dados para treino
+
+
+# Modelo log-linear
+# Dataframe com constante
+X_train_com_constante = sm.add_constant(X_train)
+
+modelo_stats_models = sm.OLS(y_train, X_train_com_constante, hasconst=True).fit()
+# OLS - método de estimação - Mínimos Quadrados Ordinários
+
+#                             OLS Regression Results
+# ==============================================================================
+# Dep. Variable:              log_valor   R-squared:                       0.803
+# Model:                            OLS   Adj. R-squared:                  0.803
+# Method:                 Least Squares   F-statistic:                     5431.
+# Date:                Thu, 29 Sep 2022   Prob (F-statistic):               0.00
+# Time:                        15:17:57   Log-Likelihood:                -2002.9
+# No. Observations:                4000   AIC:                             4014.
+# Df Residuals:                    3996   BIC:                             4039.
+# Df Model:                           3
+# Covariance Type:            nonrobust
+# =====================================================================================
+#                         coef    std err          t      P>|t|      [0.025      0.975]
+# -------------------------------------------------------------------------------------
+# const                 9.4002      0.061    155.300      0.000       9.282       9.519
+# log_area              1.0460      0.012     88.088      0.000       1.023       1.069
+# log_dist_praia       -0.4903      0.009    -56.832      0.000      -0.507      -0.473
+# log_dist_farmacia    -0.0255      0.032     -0.808      0.419      -0.088       0.036
+# ==============================================================================
+# Omnibus:                       64.329   Durbin-Watson:                   2.026
+# Prob(Omnibus):                  0.000   Jarque-Bera (JB):              111.270
+# Skew:                           0.113   Prob(JB):                     6.89e-25
+# Kurtosis:                       3.785   Cond. No.                         48.2
+# ==============================================================================
