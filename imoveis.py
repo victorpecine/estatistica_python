@@ -248,3 +248,19 @@ coef_log_area, coef_log_dist_praia = modelo_com_dados_treino.coef_
 
 # O acréscimo de 1% na área do imóvel representa um acréscimo de 1,04% no valor do imóvel
 # O acréscimo de 1% na distância até a praia representa um decréscimo de 0,49% no valor do imóvel
+
+
+y_previsto_train = modelo_com_dados_treino.predict(X_train)
+
+residuo = y_train - y_previsto_train
+
+# Distribuição de frequência dos resíduos
+ax = sns.displot(residuo)
+
+ax.figure.set_size_inches(22,6)
+
+ax.fig.suptitle('Distribuição de frequência dos resíduos (log)', fontsize=18, y=1.10)
+
+ax.set_ylabels('Ocorrências', fontsize=14)
+
+ax.savefig('graficos/imoveis_dist_freq_residuos_log.png')
