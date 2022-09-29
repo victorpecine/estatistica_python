@@ -87,6 +87,7 @@ df_imoveis['log_dist_praia'] = np.log(df_imoveis['dist_praia'] + 1)
 
 df_imoveis['log_dist_farmacia'] = np.log(df_imoveis['dist_farmacia'] + 1)
 
+
 # Nova distribuição de frequência
 valores_nova_dist_freq = sns.displot(data=df_imoveis['log_valor'])
 
@@ -99,3 +100,11 @@ valores_nova_dist_freq.set_xlabels('Log do valor', fontsize=14)
 valores_nova_dist_freq.set_ylabels('Ocorrências', fontsize=14)
 
 valores_nova_dist_freq.savefig('graficos/valores_imoveis_nova_dist_freq.png')
+
+
+# Nova dispersão entre as variáveis
+nova_disper_variaveis = sns.pairplot(data=df_imoveis, y_vars='log_valor', x_vars=['log_area', 'log_dist_praia', 'log_dist_farmacia'], height=5, kind='reg')
+
+nova_disper_variaveis.fig.suptitle('Nova disperção entre as variáveis', fontsize=12)
+
+nova_disper_variaveis.savefig('graficos/imoveis_nova_disper_entre_variaveis')
