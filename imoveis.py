@@ -226,14 +226,11 @@ valor_pontual_previsto = np.exp(log_valor_pontual_previsto)
 
 
 # Simulador simples
-area = 250
+def simulador(area, dist_praia):
+    entrada_log = [[np.log(area), np.log(dist_praia) + 1]]
+    y_previsto_simulador = np.exp(modelo_com_dados_treino.predict(entrada_log)[0])
 
-dist_praia = 1
+    return y_previsto_simulador
 
-entrada_log = [[np.log(area), np.log(dist_praia) + 1]]
-# A distância até a praia pode ser 0 km
-# log(0) = -inf
-# Por essa razão é somado 1
-
-y_previsto_simulador = np.exp(modelo_com_dados_treino.predict(entrada_log)[0])
-# R$ 2363600.3627711697
+print(simulador(250, 1))
+# 2363600.3627711697
