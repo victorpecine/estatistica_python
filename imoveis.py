@@ -155,3 +155,6 @@ modelo_stats_models = sm.OLS(y_train, X_train_com_constante, hasconst=True).fit(
 # Skew:                           0.113   Prob(JB):                     6.89e-25
 # Kurtosis:                       3.785   Cond. No.                         48.2
 # ==============================================================================
+
+# O p_valor de log_dist_farmaciaé muito maior que a significância 0.05, demonstrando que essa variável é estatisticamente insignificante e pode ser removida do modelo
+# A Prob (F-statistic) <= 0.05 permite aceitar a hipótese nula: o ajuste do modelo somente com o intercepto e seu modelo são iguais
