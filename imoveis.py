@@ -210,5 +210,16 @@ r_quadrado_dados_treino = modelo_com_dados_treino.score(X_train, y_train)
 y_previsto = modelo_com_dados_treino.predict(X_test)
 
 r_quadrado_dados_teste = metrics.r2_score(y_test, y_previsto)
+# 0.7995385786900894
 
-print(r_quadrado_dados_teste)
+
+# Previsão pontual com dados de teste
+entrada = X_test[0:1]
+#       log_area  log_dist_praia
+# 2479  4.382027        0.523941
+
+log_valor_pontual_previsto = modelo_com_dados_treino.predict(entrada)[0]
+# 13.717087608555264
+
+valor_pontual_previsto = np.exp(log_valor_pontual_previsto)
+# R$ 906265.5182179569
