@@ -1,5 +1,6 @@
 import pandas as pd
 import seaborn as sns
+import numpy as np
 
 
 sns.set_palette('OrRd')
@@ -72,3 +73,29 @@ disper_variaveis = sns.pairplot(data=df_imoveis, y_vars='valor', x_vars=['area',
 disper_variaveis.fig.suptitle('Disperção entre as variáveis', fontsize=12)
 
 disper_variaveis.savefig('graficos/imoveis_disper_entre_variaveis')
+
+
+# Transformação das variáveis para distribuição normal
+df_imoveis['log_valor'] = np.log(df_imoveis['valor'])
+
+df_imoveis['log_area'] = np.log(df_imoveis['area'])
+
+df_imoveis['log_dist_praia'] = np.log(df_imoveis['dist_praia'] + 1)
+# log(0) = -inf
+# Para evitar erros foi somado 1
+# Essa soma não altera a variação dos valores
+
+df_imoveis['log_dist_farmacia'] = np.log(df_imoveis['dist_farmacia'] + 1)
+
+# Nova distribuição de frequência
+valores_nova_dist_freq = sns.displot(data=df_imoveis['log_valor'])
+
+valores_nova_dist_freq.figure.set_size_inches(22,6)
+
+valores_nova_dist_freq.fig.suptitle('Nova distribuição de frequência\nValor dos imóveis', fontsize=18, y=1.10)
+
+valores_nova_dist_freq.set_xlabels('Log do valor', fontsize=14)
+
+valores_nova_dist_freq.set_ylabels('Ocorrências', fontsize=14)
+
+valores_nova_dist_freq.savefig('graficos/valores_imoveis_nova_dist_freq.png')
