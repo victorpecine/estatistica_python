@@ -232,5 +232,19 @@ def simulador(area, dist_praia):
 
     return y_previsto_simulador
 
-print(simulador(250, 1))
-# 2363600.3627711697
+
+# Valor médio dos imóveis sem a influência das variáveis
+log_y_intercepto = modelo_com_dados_treino.intercept_
+# 9.389557201729982
+
+y_intercepto = np.exp(log_y_intercepto)
+# R$ 11962.801051689552
+
+
+# Coeficientes de regressão
+coef_log_area, coef_log_dist_praia = modelo_com_dados_treino.coef_
+# 1.0462012180287272
+# -0.4904197473593621
+
+# O acréscimo de 1% na área do imóvel representa um acréscimo de 1,04% no valor do imóvel
+# O acréscimo de 1% na distância até a praia representa um decréscimo de 0,49% no valor do imóvel
