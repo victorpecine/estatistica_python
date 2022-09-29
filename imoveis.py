@@ -1,3 +1,4 @@
+from pyexpat import model
 import pandas as pd
 import seaborn as sns
 import numpy as np
@@ -158,3 +159,37 @@ modelo_stats_models = sm.OLS(y_train, X_train_com_constante, hasconst=True).fit(
 
 # O p_valor de log_dist_farmaciaé muito maior que a significância 0.05, demonstrando que essa variável é estatisticamente insignificante e pode ser removida do modelo
 # A Prob (F-statistic) <= 0.05 permite aceitar a hipótese nula: o ajuste do modelo somente com o intercepto e seu modelo são iguais
+
+
+# Novo modelo de treino e teste sem a variável log_dist_farmacia
+X = df_imoveis[['log_area', 'log_dist_praia']]
+
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=1240)
+
+X_train_com_constante = sm.add_constant(X_train)
+
+modelo_stats_models = sm.OLS(y_train, X_train_com_constante, hasconst=True).fit()
+
+#                             OLS Regression Results
+# ==============================================================================
+# Dep. Variable:              log_valor   R-squared:                       0.803
+# Model:                            OLS   Adj. R-squared:                  0.803
+# Method:                 Least Squares   F-statistic:                     8147.
+# Date:                Thu, 29 Sep 2022   Prob (F-statistic):               0.00
+# Time:                        16:03:49   Log-Likelihood:                -2003.2
+# No. Observations:                4000   AIC:                             4012.
+# Df Residuals:                    3997   BIC:                             4031.
+# Df Model:                           2
+# Covariance Type:            nonrobust
+# ==================================================================================
+#                      coef    std err          t      P>|t|      [0.025      0.975]
+# ----------------------------------------------------------------------------------
+# const              9.3896      0.059    158.972      0.000       9.274       9.505
+# log_area           1.0462      0.012     88.130      0.000       1.023       1.069
+# log_dist_praia    -0.4904      0.009    -56.851      0.000      -0.507      -0.474
+# ==============================================================================
+# Omnibus:                       64.732   Durbin-Watson:                   2.027
+# Prob(Omnibus):                  0.000   Jarque-Bera (JB):              112.194
+# Skew:                           0.113   Prob(JB):                     4.34e-25
+# Kurtosis:                       3.789   Cond. No.                         46.6
+# ==============================================================================
