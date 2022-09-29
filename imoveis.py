@@ -4,6 +4,8 @@ import seaborn as sns
 import numpy as np
 from sklearn.model_selection import train_test_split
 import statsmodels.api as sm
+from sklearn.linear_model import LinearRegression
+from sklearn import metrics
 
 
 sns.set_palette('OrRd')
@@ -196,3 +198,17 @@ modelo_stats_models = sm.OLS(y_train, X_train_com_constante, hasconst=True).fit(
 
 # Prob (F-statistic): <= 0.05 -> modelo aceito
 # p_valor <= 0.05 -> modelo aceito
+
+
+# Previsão de valores
+modelo_com_dados_treino = LinearRegression().fit(X_train, y_train)
+
+r_quadrado_dados_treino = modelo_com_dados_treino.score(X_train, y_train)
+# 0.8030177259167965
+
+# Previsão para os dados de teste
+y_previsto = modelo_com_dados_treino.predict(X_test)
+
+r_quadrado_dados_teste = metrics.r2_score(y_test, y_previsto)
+
+print(r_quadrado_dados_teste)
