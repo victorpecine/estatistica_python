@@ -36,6 +36,7 @@ correlacao = df_imoveis.corr().round(4)
 
 
 # Análises gráficas
+# Boxplot
 valores_boxplot = sns.boxplot(data=df_imoveis['valor'], orient='h', width=0.5)
 
 valores_boxplot.figure.set_size_inches(22,6)
@@ -49,6 +50,7 @@ valores_imoveis_boxplot = valores_boxplot.get_figure()
 valores_imoveis_boxplot.savefig('graficos/valores_imoveis_boxplot.png')
 
 
+# Distribuição de frequência
 valores_dist_freq = sns.displot(data=df_imoveis['valor'])
 
 valores_dist_freq.figure.set_size_inches(22,6)
@@ -60,3 +62,13 @@ valores_dist_freq.set_xlabels('Valor em milhões de reais', fontsize=14)
 valores_dist_freq.set_ylabels('Ocorrências', fontsize=14)
 
 valores_dist_freq.savefig('graficos/valores_imoveis_dist_freq.png')
+
+
+# Dispersão entre as variáveis
+sns.set_palette('Dark2')
+
+disper_variaveis = sns.pairplot(data=df_imoveis, y_vars='valor', x_vars=['area', 'dist_praia', 'dist_farmacia'], height=5, kind='reg')
+
+disper_variaveis.fig.suptitle('Disperção entre as variáveis', fontsize=12)
+
+disper_variaveis.savefig('graficos/imoveis_disper_entre_variaveis')
