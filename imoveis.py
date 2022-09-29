@@ -193,3 +193,6 @@ modelo_stats_models = sm.OLS(y_train, X_train_com_constante, hasconst=True).fit(
 # Skew:                           0.113   Prob(JB):                     4.34e-25
 # Kurtosis:                       3.789   Cond. No.                         46.6
 # ==============================================================================
+
+# Prob (F-statistic): <= 0.05 -> modelo aceito
+# p_valor <= 0.05 -> modelo aceito
